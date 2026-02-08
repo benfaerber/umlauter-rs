@@ -18,6 +18,14 @@ Umlauter monitors your keyboard via evdev. When it detects a trigger sequence, i
 
 All mappings are configurable in `umlauter.toml`.
 
+## Quick Install
+
+```bash
+curl -sL https://raw.githubusercontent.com/benfaerber/umlauter-rs/master/install.sh | bash
+```
+
+This builds from source, installs the binary, config, desktop entry, sets up autostart, and configures permissions. You may be prompted for your sudo password.
+
 ## Requirements
 
 - Linux with X11
