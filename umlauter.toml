@@ -1,0 +1,16 @@
+# Umlauter configuration
+# Maps trigger sequences to accented characters.
+# When you type a trigger sequence (e.g. "aee"), Umlauter will
+# delete the typed characters and replace them with the accented letter.
+#
+# Format: "trigger" = "replacement"
+# The trigger is what you type; the replacement is what appears.
+
+[mappings]
+aee = "ä"
+oee = "ö"
+uee = "ü"
+AEE = "Ä"
+OEE = "Ö"
+UEE = "Ü"
+sse = "ß"
