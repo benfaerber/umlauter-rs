@@ -6,15 +6,17 @@ A lightweight Linux tray application that lets you type accented characters usin
 
 Umlauter monitors your keyboard via evdev. When it detects a trigger sequence, it erases the typed characters with backspaces and inserts the replacement using xdotool.
 
-| You type | You get |
-|----------|---------|
-| `aee`    | ä       |
-| `oee`    | ö       |
-| `uee`    | ü       |
-| `AEE`    | Ä       |
-| `OEE`    | Ö       |
-| `UEE`    | Ü       |
-| `sse`    | ß       |
+| You type                  | You get |
+|---------------------------|---------|
+| `aee`                     | ä       |
+| `oee`                     | ö       |
+| `uee`                     | ü       |
+| `sse`                     | ß       |
+| `Aee` / `AEE` / `AeE`... | Ä       |
+| `Oee` / `OEE` / `OeE`... | Ö       |
+| `Uee` / `UEE` / `UeE`... | Ü       |
+
+Matching is case-insensitive. If the first letter is uppercase, the replacement is uppercase.
 
 All mappings are configurable in `umlauter.toml`.
 
@@ -53,17 +55,14 @@ sudo udevadm control --reload-rules && sudo udevadm trigger
 
 **Log out and back in** for the group change to take effect.
 
-## Install
+## Manual Install
+
+If you prefer to do it yourself after building:
 
 ```bash
-# Binary
 cp target/release/umlauter ~/.local/bin/
-
-# Config
 mkdir -p ~/.config/umlauter
 cp umlauter.toml ~/.config/umlauter/
-
-# Desktop entry (shows up in app launcher)
 cp umlauter.desktop ~/.local/share/applications/
 
 # Optional: autostart on login

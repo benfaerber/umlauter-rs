@@ -211,10 +211,16 @@ impl KeyboardListener {
 
         let mut buffer = String::new();
         let mut shift_held = false;
+        let mut caps_lock_on = false;
 
         for event in rx {
             if is_shift(event.key) {
                 shift_held = event.value != 0;
+                continue;
+            }
+
+            if event.key == Key::KEY_CAPSLOCK && event.value == 1 {
+                caps_lock_on = !caps_lock_on;
                 continue;
             }
 
@@ -227,7 +233,7 @@ impl KeyboardListener {
                 continue;
             }
 
-            let Some(ch) = keycode_to_char(event.key, shift_held) else {
+            let Some(ch) = keycode_to_char(event.key, shift_held ^ caps_lock_on) else {
                 buffer.clear();
                 continue;
             };
@@ -245,18 +251,37 @@ impl KeyboardListener {
 
             for trigger_len in 2..=buffer.len() {
                 let suffix = &buffer[buffer.len() - trigger_len..];
-                if let Some(replacement) = mappings.get(suffix) {
+                let suffix_lower = suffix.to_lowercase();
+                if let Some(replacement) = mappings.get(&suffix_lower) {
+                    let first_char_upper = suffix.chars().next().is_some_and(|c| c.is_uppercase());
+                    let replacement = if first_char_upper {
+                        replacement.to_uppercase()
+                    } else {
+                        replacement.clone()
+                    };
                     matched_trigger = Some(suffix.to_string());
-                    matched_replacement = Some(replacement.clone());
+                    matched_replacement = Some(replacement);
                 }
             }
 
             if let (Some(trigger), Some(replacement)) = (matched_trigger, matched_replacement) {
                 eprintln!("  match: {:?} -> {:?}", trigger, replacement);
+
+                if shift_held {
+                    emit_key(&mut vdev, Key::KEY_LEFTSHIFT, 0);
+                    std::thread::sleep(Duration::from_millis(8));
+                }
+
                 let backspace_count = trigger.len();
                 emit_backspaces(&mut vdev, backspace_count);
                 std::thread::sleep(Duration::from_millis(20));
                 type_string_xdotool(&replacement);
+
+                if shift_held {
+                    std::thread::sleep(Duration::from_millis(8));
+                    emit_key(&mut vdev, Key::KEY_LEFTSHIFT, 1);
+                }
+
                 buffer.clear();
             }
         }

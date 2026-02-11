@@ -3,14 +3,14 @@
 # When you type a trigger sequence (e.g. "aee"), Umlauter will
 # delete the typed characters and replace them with the accented letter.
 #
+# Matching is case-insensitive. If the first letter you type is uppercase,
+# the replacement will be uppercase: aee -> ä, Aee -> Ä, AEE -> Ä
+#
 # Format: "trigger" = "replacement"
-# The trigger is what you type; the replacement is what appears.
+# Triggers should be lowercase.
 
 [mappings]
 aee = "ä"
 oee = "ö"
 uee = "ü"
-AEE = "Ä"
-OEE = "Ö"
-UEE = "Ü"
 sse = "ß"
